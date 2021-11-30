@@ -15,7 +15,9 @@ public class LevelPathEditor : Editor
         lp.segments = EditorGUILayout.IntField("Segments", lp.segments);
         lp.length = EditorGUILayout.IntField("Length Per Segment", lp.length);
         lp.obstacesPerSegment = EditorGUILayout.IntField("Obstacles Per Segment", lp.obstacesPerSegment);
-        lp.pf = (GameObject)EditorGUILayout.ObjectField("Obstacle Prefab", lp.pf, typeof(Object), true);
+        lp.lightsPerSegment = EditorGUILayout.IntField("Lights Per Segment", lp.lightsPerSegment);
+        lp.obstacle = (GameObject)EditorGUILayout.ObjectField("Obstacle Prefab", lp.obstacle, typeof(Object), true);
+        lp.light = (GameObject)EditorGUILayout.ObjectField("Light Prefab", lp.light, typeof(Object), true);
         if (GUILayout.Button("Generate Level"))
         {
             lp.GenerateLevel();

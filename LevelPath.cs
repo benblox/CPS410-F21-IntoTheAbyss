@@ -13,7 +13,9 @@ public class LevelPath : MonoBehaviour
     public int segments;
     public int length;
     public int obstacesPerSegment;
-    public GameObject pf;
+    public int lightsPerSegment;
+    public GameObject obstacle;
+    public GameObject light;
 
     [SerializeField]
     private Transform[] pathPoints;
@@ -100,8 +102,8 @@ public class LevelPath : MonoBehaviour
             go.transform.position = new Vector3(x, y, z+=length);
             go.transform.parent = this.transform;
             //go.transform.Rotate(0, 0, rot += 15);
-            x += Random.Range(-length/2, length/2);
-            y += Random.Range(-length/2, length/2);
+            x += Random.Range(-length/5, length/5);
+            y += Random.Range(-length/5, length/5);
         }
 
         pathPoints = GetComponentsInChildren<Transform>();
@@ -112,8 +114,7 @@ public class LevelPath : MonoBehaviour
         GenTubePoints();
         extrudeTube();
         CreateObstacles();
-
-
+        CreateLights();
     }
 
     public void DestroyLevel()
@@ -133,6 +134,11 @@ public class LevelPath : MonoBehaviour
             mesh.Clear();
         }
         GameObject[] obs = GameObject.FindGameObjectsWithTag("Obstacle");
+        foreach (var item in obs)
+        {
+            DestroyImmediate(item);
+        }
+        obs = GameObject.FindGameObjectsWithTag("HallwayLight");
         foreach (var item in obs)
         {
             DestroyImmediate(item);
@@ -158,7 +164,15 @@ public class LevelPath : MonoBehaviour
             for (int j = 0; j < shape2D.vertices.Length; j++) // 0 .. 7
             {
                 tubePoints[iamdumb] = (Vector3)shape2D.vertices[j].point + pathPoints[i].position;
-                uvs0.Add(new Vector2(shape2D.vertices[j].u, .001F));
+                if(i % 2 == 1)
+                {
+                    uvs0.Add(new Vector2(shape2D.vertices[j].u, 0));
+                }
+                else
+                {
+                    uvs0.Add(new Vector2(shape2D.vertices[j].u, 1));
+                }
+                
                 iamdumb++;
             }
 
@@ -192,7 +206,26 @@ public class LevelPath : MonoBehaviour
                         break;
                 }
                 var newPos = (pathPoints[i + 1].position - pathPoints[i].position) * (1 / ((float)obstacesPerSegment + 1) * j) + pathPoints[i].position;
-                Instantiate(pf, newPos + offset, rot);
+                Instantiate(obstacle, newPos + offset, rot);
+            }
+
+        }
+    }
+
+    private void CreateLights()
+    {
+
+        for (int i = 1; i < pathPoints.Length - 1; i++)
+        {
+            for (int j = 1; j < lightsPerSegment + 1; j++)
+            {
+                var newPos = (pathPoints[i + 1].position - pathPoints[i].position) * (1 / ((float)lightsPerSegment + 1) * j) + pathPoints[i].position;
+                    
+                Instantiate(light, (newPos + new Vector3(24, 24, 0)), Quaternion.identity);
+                Instantiate(light, (newPos + new Vector3(24, -24, 0)), Quaternion.identity);
+                Instantiate(light, (newPos + new Vector3(-24, -24, 0)), Quaternion.identity);
+                Instantiate(light, (newPos + new Vector3(-24, 24, 0)), Quaternion.identity);
+                
             }
 
         }
