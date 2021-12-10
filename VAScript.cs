@@ -16,14 +16,10 @@ public class VAScript : MonoBehaviour
      * Variables:
      * lines: list of audioclips (if more than 1)
      * subaudio: audiosource in submarine
-     * subtitles: strings with subtitles
-     * textLine: text object in game
-     * time: time used for subtitles
      */
     private List<AudioClip> lines = new List<AudioClip>();
     private AudioSource subAudio;
-    public string[] subtitles;
-    public float time;
+
     // Start is called before the first frame update
 
     // Update is called once per frame
@@ -47,49 +43,116 @@ public class VAScript : MonoBehaviour
             lines.Clear();
         }
         //textLine.text = "";
-        Destroy(transform.gameObject);
     }
 
-    /*
-     * Subtitles
-     * controls subtitles when triggered
-     * uses an array for multiple subtitles
-     */
 
     /*
      * OnTriggerEnter
-     * if player sub hits voiceacting empties, sound and subtitles start
+     * if player sub hits voiceacting empties
      */
     private void OnTriggerEnter(Collider other)
     {
         //print(other);
         if (other.transform.tag == "PlayerSub")
-        {   
-            switch (MasterSingleton.Instance.lineIndex)
+        {
+            if (gameObject.tag == "DestroyedSub")
             {
-                case 0:
+                switch (MasterSingleton.Instance.easterEggSubIndex)
                 {
-                    lines.Add(Resources.Load("Audio/VA/Boat/Act 1 Scene 1") as AudioClip);
-                    lines.Add(Resources.Load("Audio/VA/Boat/Act 1 Scene 2") as AudioClip);
-                    break;
-                }
+                    
+                    case 0:
+                    {
+                            lines.Add(Resources.Load("Audio/VA/Optionals/Submarine01-Henson") as AudioClip);
+                            MasterSingleton.Instance.easterEggSubIndex++;
+                            break;
+                    }
 
-                case 1:
-                {
-                    lines.Add(Resources.Load("Audio/VA/Boat/Act 1 Scene 3 Part 1") as AudioClip);
-                    lines.Add(Resources.Load("Audio/VA/Blackboxes/Submarine01-Henson") as AudioClip);
-                    lines.Add(Resources.Load("Audio/VA/Boat/Act 1 Scene 3 Part 2") as AudioClip);
-                    MasterSingleton.Instance.lineIndex++;
-                    break;
+                    case 1:
+                    {
+                            lines.Add(Resources.Load("Audio/VA/Optionals/Submarine02-Biologists") as AudioClip);
+                            MasterSingleton.Instance.easterEggSubIndex++;
+                            break;
+                    }
                 }
+            }
+            else if (gameObject.tag == "OptionalVoiceTrigger")
+            {
+                switch (MasterSingleton.Instance.optionalLineIndex)
+                {
 
-                case 2:
-                {
-                    lines.Add(Resources.Load("Audio/VA/Blackboxes/Submarine01-Biologists") as AudioClip);
-                    lines.Add(Resources.Load("Audio/VA/Boat/Act 1 Scene 4") as AudioClip);
-                    MasterSingleton.Instance.lineIndex++;
-                    break;
+                    case 0:
+                    {
+                            lines.Add(Resources.Load("Audio/VA/Boat/Act2Scene2") as AudioClip);
+                            MasterSingleton.Instance.optionalLineIndex++;
+                            break;
+                    }
+
+                    case 1:
+                    {
+                            lines.Add(Resources.Load("Audio/VA/Boat/Act2Scene3") as AudioClip);
+                            MasterSingleton.Instance.optionalLineIndex++;
+                            break;
+                    }
+                    case 2:
+                    {
+                            lines.Add(Resources.Load("Audio/VA/Boat/Act3Scene2") as AudioClip);
+                            MasterSingleton.Instance.optionalLineIndex++;
+                            break;
+                    }
+
                 }
+            }
+            else if (gameObject.tag == "VoiceTrigger")
+            { 
+
+                switch (MasterSingleton.Instance.basicLineIndex)
+                {
+
+                    case 0:
+                    {
+                            Debug.Log("run?");
+                            lines.Add(Resources.Load("Audio/VA/Boat/Act1Scene1FilteredFinal") as AudioClip);
+                            MasterSingleton.Instance.basicLineIndex++;
+                            break;
+                    }
+
+                    case 1:
+                    {
+                            Debug.Log("not broken");
+                            lines.Add(Resources.Load("Audio/VA/Boat/Act2Scene1") as AudioClip);
+                            MasterSingleton.Instance.basicLineIndex++;
+                            break;
+                    }
+
+                    case 2:
+                    {
+                            lines.Add(Resources.Load("Audio/VA/Boat/Act3Scene1") as AudioClip);
+                            MasterSingleton.Instance.basicLineIndex++;
+                            break;
+                    }
+                    case 3:
+                    {
+                            lines.Add(Resources.Load("Audio/VA/Boat/Act3Scene3") as AudioClip);
+                            MasterSingleton.Instance.basicLineIndex++;
+                            break;
+                    }
+                    case 4:
+                    {
+                            lines.Add(Resources.Load("Audio/VA/Boat/Act3Scene4") as AudioClip);
+                            MasterSingleton.Instance.basicLineIndex++;
+                            break;
+                    }
+                    case 5:
+                    {
+                            lines.Add(Resources.Load("Audio/VA/Boat/Act4Scene1Filtered") as AudioClip);
+                            MasterSingleton.Instance.basicLineIndex++;
+                            break;
+                    }
+                }
+            }
+            if (lines[0] == null)
+            {
+                Debug.Log("broken");
             }
             GetComponent<BoxCollider>().enabled = false;
             subAudio = other.transform.GetComponent<AudioSource>();

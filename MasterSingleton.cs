@@ -6,10 +6,18 @@ public class MasterSingleton : MonoBehaviour
 {
     private static MasterSingleton _instance;
 
+    public int basicLineIndex = 0;
+    public int optionalLineIndex = 0;
+    public int easterEggSubIndex = 0;
+    public bool plant1Activated = false;
+    public bool plant2Activated = false;
+    
+
     public static MasterSingleton Instance 
-    { 
+    {   
         get { return _instance; } 
-    } 
+    }
+    
 
     private void Awake() 
     { 
@@ -22,6 +30,6 @@ public class MasterSingleton : MonoBehaviour
         _instance = this;
         DontDestroyOnLoad(this.gameObject);
     }
+       
 
-    public int lineIndex = 0;
 }

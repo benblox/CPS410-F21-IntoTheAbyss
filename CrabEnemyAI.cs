@@ -43,11 +43,11 @@ public class CrabEnemyAI : MonoBehaviour
                 }
                 distanceFromTarget = (goal.position - transform.position);
                 distanceFromTarget = new Vector3(distanceFromTarget.x, 0f, distanceFromTarget.z);
-                if (distanceFromTarget.magnitude < 10f && !jumped)
+                if (distanceFromTarget.magnitude < 40f && !jumped)
                 {
                     agent.enabled = false;
 
-                    rb.velocity = Vector3.up * 9f + distanceFromTarget.normalized * 10f;
+                    rb.velocity = Vector3.up * 15f + distanceFromTarget.normalized * 10f;
 
                     rb.useGravity = true;
                     jumped = true;
@@ -75,7 +75,7 @@ public class CrabEnemyAI : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            
+            transform.rotation = Quaternion.identity;
             while (!Physics.Raycast(new Ray(transform.position - Vector3.up * 0.5f, Vector3.up * -1f), 0.5f))
             {
                 transform.position += Vector3.up * 0.1f;
